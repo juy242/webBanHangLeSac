@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LESAC - Túi Xách & Ví Thời Trang Premium</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; }
+    </style>
+</head>
+<body class="bg-[#f9f9f9] text-[#1a1a1a]">
+
+    <!-- Thanh thông báo cho Admin nếu đang xem trang khách -->
+    <div id="admin-top-bar" class="bg-black text-white px-4 py-2 text-xs flex justify-between items-center hidden">
+        <span><i class="fa-solid fa-shield-halved mr-1 text-amber-400"></i> Bạn đang đăng nhập với tư cách Quản trị viên.</span>
+        <a href="admin.html" class="bg-white text-black px-3 py-1 font-bold rounded-sm hover:bg-gray-200 transition">
+            <i class="fa-solid fa-arrow-left mr-1"></i> Quay lại trang Quản Trị Admin
+        </a>
+    </div>
+
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 h-32 flex flex-col justify-between items-center py-4">
+            <div onclick="showSection('hero')" class="text-3xl md:text-4xl font-bold tracking-[0.3em] uppercase text-center w-full select-none cursor-pointer hover:opacity-80 transition-opacity">
+                LESAC
+            </div>
+            <div class="w-full flex justify-between items-center border-t border-gray-50 pt-3 gap-2">
+                <!-- Menu mobile (chỉ hiện dưới lg) -->
+                <div class="lg:hidden flex items-center space-x-3 text-gray-700 shrink-0 w-16">
+                    <button onclick="toggleMobileMenu(true)" class="hover:text-black transition-colors cursor-pointer">
+                        <i class="fa-solid fa-bars text-base"></i>
+                    </button>
+                </div>
+                <!-- Nav desktop -->
+                <nav class="hidden lg:flex items-center space-x-8 text-xs font-semibold tracking-widest uppercase mx-auto">
+                    <div class="relative group py-2">
+                        <button onclick="filterProducts('tui')" class="hover:text-gray-500 transition-colors flex items-center gap-1 cursor-pointer uppercase font-semibold whitespace-nowrap">
+                            Túi <i class="fa-solid fa-chevron-down text-[9px] text-gray-400 group-hover:rotate-180 transition-transform duration-300"></i>
+                        </button>
+                        <div class="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-44 bg-white border border-gray-100 shadow-xl rounded-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-300 z-50">
+                            <ul class="py-2 text-[11px] font-normal tracking-wider normal-case text-gray-600">
+                                <li><button onclick="filterProducts('tui-cheo')" class="w-full text-left block px-4 py-2.5 hover:bg-gray-50 hover:text-black transition-colors cursor-pointer">Túi đeo chéo</button></li>
+                                <li><button onclick="filterProducts('tui-vai')" class="w-full text-left block px-4 py-2.5 hover:bg-gray-50 hover:text-black transition-colors cursor-pointer">Túi đeo vai</button></li>
+                                <li><button onclick="filterProducts('tui-tote')" class="w-full text-left block px-4 py-2.5 hover:bg-gray-50 hover:text-black transition-colors cursor-pointer">Túi tote</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="relative group py-2">
+                        <button onclick="filterProducts('vi')" class="hover:text-gray-500 transition-colors flex items-center gap-1 cursor-pointer uppercase font-semibold whitespace-nowrap">
+                            Ví <i class="fa-solid fa-chevron-down text-[9px] text-gray-400 group-hover:rotate-180 transition-transform duration-300"></i>
+                        </button>
+                        <div class="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-40 bg-white border border-gray-100 shadow-xl rounded-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-300 z-50">
+                            <ul class="py-2 text-[11px] font-normal tracking-wider normal-case text-gray-600">
+                                <li><button onclick="filterProducts('vi-truyen-thong')" class="w-full text-left block px-4 py-2.5 hover:bg-gray-50 hover:text-black transition-colors cursor-pointer">Ví truyền thống</button></li>
+                                <li><button onclick="filterProducts('vi-the')" class="w-full text-left block px-4 py-2.5 hover:bg-gray-50 hover:text-black transition-colors cursor-pointer">Ví đựng thẻ</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button onclick="showSection('collection')" class="hover:text-gray-500 transition-colors py-2 whitespace-nowrap cursor-pointer uppercase font-semibold">Bộ sưu tập</button>
+                    <button onclick="showSection('contact')" class="hover:text-gray-500 transition-colors py-2 whitespace-nowrap cursor-pointer uppercase font-semibold">Liên hệ</button>
+                </nav>
+                <div class="flex items-center space-x-4 md:space-x-5 text-gray-700 shrink-0">
+                    <button onclick="toggleSearch()" class="hover:text-black transition-colors cursor-pointer"><i class="fa-solid fa-magnifying-glass text-sm md:text-base"></i></button>
+                    <button onclick="toggleCartDrawer(true)" class="hover:text-black transition-colors cursor-pointer relative">
+                        <i class="fa-solid fa-bag-shopping text-sm md:text-base"></i>
+                        <span id="cart-badge" class="absolute -top-1.5 -right-2 bg-black text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-sans">0</span>
+                    </button>
+                    <div class="flex items-center space-x-3 text-xs">
+                        <span id="user-greeting" class="font-medium hidden text-gray-600"></span>
+                        <button id="auth-btn" onclick="openAuthModal()" class="hover:text-black transition-colors cursor-pointer"><i class="fa-regular fa-user text-sm md:text-base"></i></button>
+                        
+                        <!-- Nút lịch sử đơn hàng: Chỉ hiện khi đã đăng nhập -->
+                        <button id="nav-history-btn" onclick="showSection('history')" class="hover:text-black transition-colors cursor-pointer text-xs uppercase font-semibold flex items-center gap-1 hidden">
+                            <i class="fa-solid fa-clock-rotate-left"></i> Đơn hàng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Thanh tìm kiếm (ẩn/hiện khi bấm nút kính lúp) -->
+        <div id="search-bar" class="hidden border-t border-gray-100 bg-white">
+            <div class="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center gap-3">
+                <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
+                <input id="search-input" type="text" oninput="searchProducts(this.value)" placeholder="Tìm kiếm sản phẩm theo tên..." class="flex-1 text-sm outline-none bg-transparent">
+                <button onclick="toggleSearch()" class="text-gray-400 hover:text-black cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+
+        <!-- Menu di động trượt xuống -->
+        <div id="mobile-menu" class="lg:hidden hidden bg-white border-t border-gray-100 shadow-lg">
+            <div class="px-6 py-4 space-y-4 text-sm">
+                <div>
+                    <button onclick="filterProducts('tui'); closeMobileMenu()" class="w-full text-left font-semibold uppercase tracking-widest text-gray-800 flex items-center justify-between py-1 cursor-pointer">
+                        Túi
+                    </button>
+                    <div class="ml-4 mt-1 space-y-2 text-xs text-gray-500">
+                        <button onclick="filterProducts('tui-cheo'); closeMobileMenu()" class="block hover:text-black transition-colors cursor-pointer">Túi đeo chéo</button>
+                        <button onclick="filterProducts('tui-vai'); closeMobileMenu()" class="block hover:text-black transition-colors cursor-pointer">Túi đeo vai</button>
+                        <button onclick="filterProducts('tui-tote'); closeMobileMenu()" class="block hover:text-black transition-colors cursor-pointer">Túi tote</button>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="filterProducts('vi'); closeMobileMenu()" class="w-full text-left font-semibold uppercase tracking-widest text-gray-800 flex items-center justify-between py-1 cursor-pointer">
+                        Ví
+                    </button>
+                    <div class="ml-4 mt-1 space-y-2 text-xs text-gray-500">
+                        <button onclick="filterProducts('vi-truyen-thong'); closeMobileMenu()" class="block hover:text-black transition-colors cursor-pointer">Ví truyền thống</button>
+                        <button onclick="filterProducts('vi-the'); closeMobileMenu()" class="block hover:text-black transition-colors cursor-pointer">Ví đựng thẻ</button>
+                    </div>
+                </div>
+                <button onclick="showSection('collection'); closeMobileMenu()" class="w-full text-left font-semibold uppercase tracking-widest text-gray-800 py-1 cursor-pointer">Bộ sưu tập</button>
+                <button onclick="showSection('contact'); closeMobileMenu()" class="w-full text-left font-semibold uppercase tracking-widest text-gray-800 py-1 cursor-pointer">Liên hệ</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero-section" class="max-w-7xl mx-auto px-6 py-12 md:py-20">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                <div class="md:col-span-6 space-y-6 text-center md:text-left">
+                    <div class="text-xs font-semibold tracking-[0.4em] uppercase text-gray-400">LESAC Premium</div>
+                    <h1 class="text-4xl md:text-6xl font-bold tracking-wide text-gray-900 leading-tight uppercase">TÚI XÁCH <br class="hidden md:block">THỜI TRANG</h1>
+                    <p class="text-sm md:text-base text-gray-500 leading-relaxed font-light italic max-w-xl mx-auto md:mx-0">
+                        "Thiết kế thanh lịch - Tôn vinh nét quý phái tối giản tinh tế vượt thời gian."
+                    </p>
+                    <button onclick="filterProducts('all')" class="bg-black text-white text-xs font-semibold tracking-widest uppercase px-8 py-4 border border-black hover:bg-transparent hover:text-black transition-all duration-300 cursor-pointer">
+                        Khám phá ngay
+                    </button>
+                </div>
+                <div class="md:col-span-6">
+                    <img src="assets/images/11.jpeg" alt="LESAC Cover Image" class="w-full h-[450px] object-cover shadow-sm grayscale hover:grayscale-0 transition-all duration-700 rounded-sm">
+                </div>
+            </div>
+        </section>
+
+        <section id="product-section" class="max-w-7xl mx-auto px-6 py-12 border-t border-gray-100">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                <div>
+                    <h2 id="collection-title" class="text-xl font-bold uppercase tracking-widest text-black">Tất cả sản phẩm</h2>
+                    <p class="text-xs text-gray-400 font-light mt-1">Được chế tác thủ công tỉ mỉ và chọn lọc kỹ lưỡng từng thớ da.</p>
+                </div>
+                <div class="flex items-center gap-3 flex-wrap">
+                    <div class="flex items-center space-x-2 text-xs border border-gray-200 bg-white px-3 py-2 rounded-xs">
+                        <span class="text-gray-400">Khoảng giá:</span>
+                        <select id="price-select" onchange="filterByPrice(this.value)" class="font-medium bg-transparent outline-none cursor-pointer">
+                            <option value="all">Tất cả</option>
+                            <option value="0-300000">Dưới 300.000đ</option>
+                            <option value="300000-500000">300.000đ - 500.000đ</option>
+                            <option value="500000-700000">500.000đ - 700.000đ</option>
+                            <option value="700000-">Trên 700.000đ</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center space-x-2 text-xs border border-gray-200 bg-white px-3 py-2 rounded-xs">
+                        <span class="text-gray-400">Sắp xếp:</span>
+                        <select id="sort-select" onchange="sortProducts()" class="font-medium bg-transparent outline-none cursor-pointer">
+                            <option value="default">Mặc định</option>
+                            <option value="asc">Giá thấp đến cao</option>
+                            <option value="desc">Giá cao đến thấp</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"></div>
+        </section>
+
+        <section id="checkout-section" class="max-w-7xl mx-auto px-6 py-16 hidden font-sans">
+            <div class="mb-6">
+                <button onclick="showSection('hero')" class="text-xs font-bold uppercase tracking-widest text-gray-600 hover:text-black flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Quay lại trang chủ / Mua sắm
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <div class="lg:col-span-7 space-y-8">
+                    <div>
+                        <h2 class="text-2xl font-bold text-black mb-6 tracking-tight">Thông tin đặt hàng</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-semibold text-gray-700">Họ và tên <span class="text-red-500">*</span></label>
+                                <input type="text" id="checkout-fullname" placeholder="Nhập họ và tên" class="w-full p-3 bg-white border border-gray-200 rounded-sm text-sm outline-none focus:border-black">
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-semibold text-gray-700">Số điện thoại <span class="text-red-500">*</span></label>
+                                <input type="text" id="checkout-userphone" placeholder="VD: 0912345678" class="w-full p-3 bg-white border border-gray-200 rounded-sm text-sm outline-none focus:border-black">
+                            </div>
+                            <div class="md:col-span-2 space-y-1.5">
+                                <label class="text-xs font-semibold text-gray-700">Email <span class="text-red-500">*</span></label>
+                                <input type="email" id="checkout-useremail" placeholder="VD: ten@gmail.com" class="w-full p-3 bg-white border border-gray-200 rounded-sm text-sm outline-none focus:border-black">
+                            </div>
+                            <div class="md:col-span-2 space-y-1.5">
+                                <label class="text-xs font-semibold text-gray-700">Địa chỉ cụ thể (Số nhà, tên đường) <span class="text-red-500">*</span></label>
+                                <input type="text" id="checkout-detail-address" placeholder="Ví dụ: Số 10 đường ABC" oninput="updateFullAddress()" class="w-full p-3 bg-white border border-gray-200 rounded-sm text-sm outline-none focus:border-black">
+                            </div>
+                            <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                <select id="select-province" class="p-3 bg-white border border-gray-200 rounded-sm text-xs text-gray-700 outline-none"><option>--- Tỉnh/ Thành phố ---</option></select>
+                                <select id="select-district" class="p-3 bg-white border border-gray-200 rounded-sm text-xs text-gray-700 outline-none"><option>--- Quận/ Huyện ---</option></select>
+                                <select id="select-ward" class="p-3 bg-white border border-gray-200 rounded-sm text-xs text-gray-700 outline-none"><option>--- Phường/ Xã ---</option></select>
+                            </div>
+                            <div class="md:col-span-2 space-y-1.5 hidden">
+                                <input type="text" id="checkout-useraddress">
+                            </div>
+                            <div class="md:col-span-2 space-y-1.5">
+                                <label class="text-xs font-semibold text-gray-700">Ghi chú</label>
+                                <textarea id="checkout-note" placeholder="Ghi chú thêm" rows="3" class="w-full p-3 bg-white border border-gray-200 rounded-sm text-sm outline-none focus:border-black"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h2 class="text-xl font-bold text-black tracking-tight">Phương thức thanh toán</h2>
+                        <div class="space-y-2.5">
+                            <label class="flex items-center p-4 bg-white border border-gray-100 rounded-sm cursor-pointer hover:bg-gray-50">
+                                <input type="radio" name="payment-method" value="cod" checked class="w-4 h-4 accent-black mr-3">
+                                <span class="text-sm font-medium text-gray-800">Thanh toán tại nhà</span>
+                            </label>
+                            <label class="flex items-center p-4 bg-white border border-gray-100 rounded-sm cursor-pointer hover:bg-gray-50">
+                                <input type="radio" name="payment-method" value="qr" class="w-4 h-4 accent-black mr-3">
+                                <span class="text-sm font-medium text-gray-800">Thanh toán chuyển khoản (Mã QR)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 bg-[#f4f4f5] p-6 md:p-8 rounded-sm space-y-6 h-fit self-start">
+                    <div id="checkout-items-list" class="space-y-4 max-h-[300px] overflow-y-auto pr-2"></div>
+                    <div class="space-y-3 text-sm border-t border-gray-200 pt-4 text-gray-700">
+                        <div class="flex justify-between">
+                            <span>Thành tiền</span>
+                            <span id="checkout-subtotal" class="font-semibold text-black">0 VND</span>
+                        </div>
+                        <div class="flex justify-between border-t border-gray-200 pt-4 text-base font-bold text-black">
+                            <span>Tổng tiền</span>
+                            <span id="checkout-total-bill" class="text-lg">0 VND</span>
+                        </div>
+                    </div>
+                    <button id="btn-submit-order" onclick="submitOrder()" class="w-full bg-black text-white py-4 text-xs font-bold tracking-widest uppercase hover:bg-zinc-800 transition-colors rounded-sm cursor-pointer">
+                        Đặt hàng
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lịch Sử Đơn Hàng (Chỉ hiển thị khi đã đăng nhập)[cite: 1] -->
+        <section id="order-history-section" class="max-w-7xl mx-auto px-6 py-16 hidden font-sans">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold uppercase tracking-wider text-black">Lịch sử đơn hàng của bạn</h2>
+                <button onclick="showSection('hero')" class="bg-black text-white px-5 py-2.5 text-xs font-bold uppercase tracking-widest rounded-sm cursor-pointer">
+                    Quay lại trang chủ
+                </button>
+            </div>
+            <div id="history-orders-list" class="space-y-4"></div>
+        </section>
+
+        <!-- Bộ Sưu Tập -->
+        <section id="collection-section" class="hidden">
+            <!-- Banner -->
+            <div class="relative">
+                <img src="assets/images/11.jpeg" alt="LESAC Collection" class="w-full h-[320px] md:h-[420px] object-cover grayscale">
+                <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+                    <div class="text-center px-6">
+                        <div class="text-xs md:text-sm font-semibold tracking-[0.5em] uppercase text-amber-300 mb-4">Limited Edition</div>
+                        <h2 class="text-3xl md:text-5xl font-bold uppercase tracking-widest text-white">Bộ Sưu Tập</h2>
+                        <div class="w-16 h-0.5 bg-amber-400 mx-auto mt-6"></div>
+                        <p class="text-xs md:text-sm text-gray-300 font-light mt-4 max-w-xl mx-auto">Những thiết kế độc quyền, giới hạn - tôn vinh vẻ đẹp tối giản vượt thời gian.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-6 py-16">
+                <div class="flex flex-col md:flex-row items-end justify-between mb-10 gap-4">
+                    <div>
+                        <h2 id="collection-bst-title" class="text-xl font-bold uppercase tracking-widest text-black">Các sản phẩm đặc biệt</h2>
+                        <p class="text-xs text-gray-400 font-light mt-1">Chỉ những sản phẩm giới hạn mới có trong bộ sưu tập này.</p>
+                    </div>
+                    <button onclick="filterProducts('bst'); showSection('hero')" class="text-xs font-bold uppercase tracking-widest border border-black px-5 py-2.5 hover:bg-black hover:text-white transition-colors cursor-pointer">
+                        Xem tất cả BST
+                    </button>
+                </div>
+                <div id="collection-product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"></div>
+            </div>
+        </section>
+
+        <section id="contact-section" class="max-w-7xl mx-auto px-6 py-20 hidden">
+            <!-- Tiêu đề -->
+            <div class="text-center mb-14">
+                <div class="text-xs font-semibold tracking-[0.4em] uppercase text-gray-400 mb-3">LESAC Premium</div>
+                <h2 class="text-3xl md:text-4xl font-bold uppercase tracking-wider text-black">Liên hệ</h2>
+                <div class="w-16 h-0.5 bg-black mx-auto mt-5"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 font-sans text-sm text-[#1a1a1a]">
+                <!-- Thông tin cửa hàng -->
+                <div class="md:col-span-5 space-y-6">
+                    <div class="space-y-1.5">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">Ghé LESAC tại</h3>
+                        <p class="text-base font-semibold text-gray-800">Khu Vui Trend - 104 Lê Văn Sỹ</p>
+                        <p class="text-gray-500">P. Phú Nhuận, TP. Hồ Chí Minh</p>
+                    </div>
+                    <div class="border-t border-gray-100 pt-5 space-y-4">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">Thông tin liên hệ</h3>
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 bg-black text-white flex items-center justify-center rounded-sm shrink-0"><i class="fa-solid fa-phone text-xs"></i></div>
+                            <div>
+                                <p class="text-[11px] uppercase tracking-wider text-gray-400 mb-0.5">Hotline</p>
+                                <p class="font-semibold text-gray-800">077 203 2860</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 bg-black text-white flex items-center justify-center rounded-sm shrink-0"><i class="fa-solid fa-envelope text-xs"></i></div>
+                            <div>
+                                <p class="text-[11px] uppercase tracking-wider text-gray-400 mb-0.5">Email</p>
+                                <p class="font-semibold text-gray-800">hello@lesac.vn</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 bg-black text-white flex items-center justify-center rounded-sm shrink-0"><i class="fa-solid fa-clock text-xs"></i></div>
+                            <div>
+                                <p class="text-[11px] uppercase tracking-wider text-gray-400 mb-0.5">Giờ mở cửa</p>
+                                <p class="font-semibold text-gray-800">Thứ 2 - Chủ nhật · 09:00 - 21:00</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-t border-gray-100 pt-5">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">Kết nối với chúng tôi</h3>
+                        <div class="flex items-center space-x-3">
+                            <a href="#" class="w-9 h-9 border border-gray-200 hover:border-black text-gray-600 hover:text-white hover:bg-black flex items-center justify-center rounded-sm transition-all cursor-pointer"><i class="fa-brands fa-facebook-f text-xs"></i></a>
+                            <a href="#" class="w-9 h-9 border border-gray-200 hover:border-black text-gray-600 hover:text-white hover:bg-black flex items-center justify-center rounded-sm transition-all cursor-pointer"><i class="fa-brands fa-instagram text-xs"></i></a>
+                            <a href="#" class="w-9 h-9 border border-gray-200 hover:border-black text-gray-600 hover:text-white hover:bg-black flex items-center justify-center rounded-sm transition-all cursor-pointer"><i class="fa-brands fa-tiktok text-xs"></i></a>
+                            <a href="#" class="w-9 h-9 border border-gray-200 hover:border-black text-gray-600 hover:text-white hover:bg-black flex items-center justify-center rounded-sm transition-all cursor-pointer"><i class="fa-brands fa-youtube text-xs"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form liên hệ -->
+                <div class="md:col-span-7 bg-white border border-gray-100 rounded-sm p-8 md:p-10 shadow-xs">
+                    <h3 class="text-lg font-bold uppercase tracking-wider text-black mb-1">Gửi tin nhắn cho chúng tôi</h3>
+                    <p class="text-xs text-gray-400 font-light mb-8">Chúng tôi sẽ phản hồi trong vòng 24 giờ làm việc.</p>
+                    <form onsubmit="handleContactSubmit(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">Họ và tên</label>
+                                <input type="text" id="contact-name" required placeholder="Nhập họ và tên" class="w-full p-3 border border-gray-200 rounded-sm text-xs focus:border-black outline-none bg-gray-50 focus:bg-white transition-colors">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">Email</label>
+                                <input type="email" id="contact-email" required placeholder="Nhập email" class="w-full p-3 border border-gray-200 rounded-sm text-xs focus:border-black outline-none bg-gray-50 focus:bg-white transition-colors">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">Chủ đề</label>
+                            <select id="contact-subject" class="w-full p-3 border border-gray-200 rounded-sm text-xs focus:border-black outline-none bg-gray-50 focus:bg-white transition-colors cursor-pointer">
+                                <option>Tư vấn sản phẩm</option>
+                                <option>Đơn hàng / Giao hàng</option>
+                                <option>Hợp tác kinh doanh</option>
+                                <option>Góp ý / Khác</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">Nội dung</label>
+                            <textarea id="contact-message" rows="5" required placeholder="Nhập nội dung liên hệ" class="w-full p-3 border border-gray-200 rounded-sm text-xs focus:border-black outline-none bg-gray-50 focus:bg-white transition-colors resize-none"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-black text-white text-xs font-bold tracking-widest uppercase py-4 hover:bg-gray-800 transition-colors rounded-sm cursor-pointer">
+                            Gửi liên hệ
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Các Modal (Giỏ hàng, Auth, QR, Chi tiết sản phẩm) -->
+    <div id="cart-drawer" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-white shadow-2xl z-50 translate-x-full flex flex-col border-l border-gray-100 transition-transform duration-300">
+        <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+            <h3 class="text-sm font-bold uppercase tracking-widest">Giỏ hàng (<span id="cart-count">0</span>)</h3>
+            <button onclick="toggleCartDrawer(false)" class="text-gray-400 hover:text-black cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+        <div id="cart-items" class="p-6 flex-1 overflow-y-auto space-y-4"></div>
+        <div class="p-6 border-t border-gray-100 bg-gray-50 space-y-4">
+            <div class="flex items-center justify-between text-sm font-semibold">
+                <span>Tạm tính:</span>
+                <span id="cart-total" class="text-base text-red-600 font-bold">0đ</span>
+            </div>
+            <button onclick="goToCheckout()" class="w-full bg-black text-white text-xs font-bold tracking-widest uppercase py-4 hover:bg-gray-800 transition-colors cursor-pointer">
+                Tiến hành đặt hàng
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Đăng nhập / Đăng ký -->
+    <div id="auth-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center hidden opacity-0 transition-all duration-300 z-50 p-4">
+        <div class="bg-white w-full max-w-md rounded-sm shadow-2xl overflow-hidden relative">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black cursor-pointer z-10"><i class="fa-solid fa-xmark text-lg"></i></button>
+
+            <!-- Header -->
+            <div class="bg-[#111111] text-white px-8 py-7 text-center">
+                <div class="text-2xl font-bold tracking-[0.3em] uppercase mb-1">LESAC</div>
+                <p class="text-[11px] text-gray-400 tracking-widest uppercase">Túi Xách & Ví Premium</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-100 text-xs font-bold uppercase tracking-widest text-center">
+                <button id="tab-login-btn" onclick="switchAuthTab('login')" class="w-1/2 py-4 border-b-2 border-black text-black cursor-pointer">Đăng nhập</button>
+                <button id="tab-register-btn" onclick="switchAuthTab('register')" class="w-1/2 py-4 border-b-2 border-transparent text-gray-400 hover:text-black cursor-pointer">Đăng ký</button>
+            </div>
+
+            <div class="p-8">
+                <form id="form-login" class="space-y-4">
+                    <div>
+                        <label class="text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">Tên đăng nhập</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-user text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 text-sm"></i>
+                            <input type="text" id="login-user" placeholder="Nhập tên đăng nhập" required class="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-sm text-xs focus:border-black outline-none bg-gray-50 focus:bg-white transition-colors">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">Mật khẩu</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-lock text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 text-sm"></i>
+                            <input type="password" id="login-pass" placeholder="••••••" required class="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-sm text-xs focus:border-black outline-none bg-gray-50 focus:bg-white transition-colors">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-black text-white text-xs font-bold tracking-widest uppercase py-3.5 hover:bg-gray-800 transition-colors cursor-pointer rounded-sm">
+                        Đăng nhập
+                    </button>
+                </form>
+                <form id="form-register" class="space-y-4 hidden">
+                    <div>
+                        <label class="text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">Họ và tên</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-id-badge text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 text-sm"></i>
+                            <input type="text" id="reg-name" placeholder="Họ và tên của bạn" required class="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-sm text-xs focus:border-black outline-none bg-gray-50 focus:bg-white transition-colors">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">Tên tài khoản</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-user text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 text-sm"></i>
+                            <input type="text" id="reg-user" placeholder="Tên đăng nhập" required class="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-sm text-xs focus:border-black outline-none bg-gray-50 focus:bg-white transition-colors">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">Mật khẩu</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-lock text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 text-sm"></i>
+                            <input type="password" id="reg-pass" placeholder="Tạo mật khẩu" required class="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-sm text-xs focus:border-black outline-none bg-gray-50 focus:bg-white transition-colors">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-black text-white text-xs font-bold tracking-widest uppercase py-3.5 hover:bg-gray-800 transition-colors cursor-pointer rounded-sm">
+                        Đăng ký
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal QR Code -->
+    <div id="qr-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center hidden opacity-0 transition-all duration-300 z-50 p-4">
+        <div class="bg-white w-full max-w-sm rounded-sm p-6 shadow-2xl text-center space-y-4 relative">
+            <button onclick="closeQrModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <h3 class="text-sm font-bold uppercase tracking-widest text-black pt-2">Mã QR Thanh Toán</h3>
+            <div class="bg-gray-50 p-4 inline-block rounded-md border border-gray-100 shadow-inner">
+                <img id="qr-image" src="" alt="VietQR" class="w-56 h-56 mx-auto object-contain">
+            </div>
+            <div class="text-xs bg-amber-50 border border-amber-200 p-3 rounded-sm text-left text-amber-800 space-y-1.5">
+                <p><strong>Số tiền:</strong> <span id="qr-amount-text" class="font-bold text-red-600"></span></p>
+                <p><strong>Nội dung:</strong> <span id="qr-desc-text" class="font-mono bg-amber-100/50 px-1 py-0.5 rounded-sm text-black"></span></p>
+            </div>
+            <button onclick="closeQrModal()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold uppercase py-3 cursor-pointer">Đóng & Xem Lịch Sử</button>
+        </div>
+    </div>
+
+    <!-- Modal Chi tiết sản phẩm -->
+    <div id="product-detail-modal" class="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center hidden opacity-0 transition-all duration-300 z-50 p-4">
+        <div class="bg-white w-full max-w-2xl rounded-sm p-6 shadow-2xl relative">
+            <button onclick="closeProductModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black cursor-pointer"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <img id="modal-img" src="" alt="" class="w-full h-80 object-cover rounded-sm">
+                <div class="space-y-4">
+                    <h2 id="modal-name" class="text-xl font-bold uppercase"></h2>
+                    <p id="modal-price" class="text-lg font-bold text-red-600"></p>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Màu sắc</label>
+                        <div id="modal-colors" class="flex gap-2 mt-2"></div>
+                        <div id="modal-color-stock" class="mt-2"></div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Số lượng</label>
+                        <div class="flex items-center gap-3 mt-2">
+                            <button onclick="changeModalQty(-1)" class="w-9 h-9 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-sm cursor-pointer"><i class="fa-solid fa-minus text-[10px]"></i></button>
+                            <input id="modal-qty" type="number" value="1" min="1" class="w-14 h-9 text-center border border-gray-200 rounded-sm outline-none focus:border-black text-sm font-bold" readonly>
+                            <button onclick="changeModalQty(1)" class="w-9 h-9 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-sm cursor-pointer"><i class="fa-solid fa-plus text-[10px]"></i></button>
+                        </div>
+                    </div>
+                    <div class="text-xs text-gray-600 space-y-1">
+                        <p><strong>Chất liệu:</strong> <span id="modal-material"></span></p>
+                        <p><strong>Kích thước:</strong> <span id="modal-size"></span></p>
+                    </div>
+                    <button onclick="addModalToCart()" class="w-full bg-black text-white py-3 text-xs font-bold uppercase hover:bg-gray-800 transition-colors cursor-pointer">Thêm vào giỏ hàng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+    <!-- Footer -->
+    <footer class="bg-[#111111] text-gray-300 mt-16">
+        <div class="max-w-7xl mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-4 gap-10 font-sans">
+            <!-- Logo & mô tả -->
+            <div class="md:col-span-2 space-y-4">
+                <div class="text-2xl font-bold tracking-[0.3em] uppercase text-white">LESAC</div>
+                <p class="text-xs text-gray-400 font-light leading-relaxed max-w-sm">
+                    Thương hiệu túi xách & ví thời trang Premium. Những thiết kế thanh lịch, tôn vinh nét quý phái tối giản tinh tế vượt thời gian.
+                </p>
+                <div class="flex items-center space-x-3 pt-2">
+                    <a href="#" class="w-9 h-9 border border-gray-700 hover:border-white text-gray-400 hover:text-white hover:bg-white flex items-center justify-center rounded-sm transition-all cursor-pointer"><i class="fa-brands fa-facebook-f text-xs"></i></a>
+                    <a href="#" class="w-9 h-9 border border-gray-700 hover:border-white text-gray-400 hover:text-white hover:bg-white flex items-center justify-center rounded-sm transition-all cursor-pointer"><i class="fa-brands fa-instagram text-xs"></i></a>
+                    <a href="#" class="w-9 h-9 border border-gray-700 hover:border-white text-gray-400 hover:text-white hover:bg-white flex items-center justify-center rounded-sm transition-all cursor-pointer"><i class="fa-brands fa-tiktok text-xs"></i></a>
+                    <a href="#" class="w-9 h-9 border border-gray-700 hover:border-white text-gray-400 hover:text-white hover:bg-white flex items-center justify-center rounded-sm transition-all cursor-pointer"><i class="fa-brands fa-youtube text-xs"></i></a>
+                </div>
+            </div>
+
+            <!-- Danh mục -->
+            <div class="space-y-3">
+                <h4 class="text-xs font-bold uppercase tracking-widest text-white mb-4">Danh mục</h4>
+                <button onclick="filterProducts('tui')" class="block text-xs text-gray-400 hover:text-white transition-colors cursor-pointer">Túi xách</button>
+                <button onclick="filterProducts('vi')" class="block text-xs text-gray-400 hover:text-white transition-colors cursor-pointer">Ví</button>
+                <button onclick="filterProducts('bst')" class="block text-xs text-gray-400 hover:text-white transition-colors cursor-pointer">Bộ sưu tập</button>
+                <button onclick="showSection('contact')" class="block text-xs text-gray-400 hover:text-white transition-colors cursor-pointer">Liên hệ</button>
+            </div>
+
+            <!-- Liên hệ -->
+            <div class="space-y-3">
+                <h4 class="text-xs font-bold uppercase tracking-widest text-white mb-4">Liên hệ</h4>
+                <p class="text-xs text-gray-400 flex items-center gap-2"><i class="fa-solid fa-location-dot text-gray-600"></i> 104 Lê Văn Sỹ, P. Phú Nhuận, TP.HCM</p>
+                <p class="text-xs text-gray-400 flex items-center gap-2"><i class="fa-solid fa-phone text-gray-600"></i> 077 203 2860</p>
+                <p class="text-xs text-gray-400 flex items-center gap-2"><i class="fa-solid fa-envelope text-gray-600"></i> hello@lesac.vn</p>
+                <p class="text-xs text-gray-400 flex items-center gap-2"><i class="fa-solid fa-clock text-gray-600"></i> 09:00 - 21:00 mỗi ngày</p>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-800">
+            <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-2">
+                <p class="text-[11px] text-gray-500">© 2026 LESAC. All rights reserved.</p>
+                <p class="text-[11px] text-gray-600">Túi Xách & Ví Thời Trang Premium</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/shop.js"></script>
+</body>
+</html>
